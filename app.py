@@ -35,8 +35,6 @@ def chatbot():
     return(render_template("chatbot.html"))
 
 
-
-
 @app.route("/reply",methods=["GET","POST"])
 def reply():
     q=request.form.get("q")
