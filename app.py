@@ -1,7 +1,14 @@
 from flask import Flask,render_template,request
 import joblib
+from groq import Groq
+import os
+
+os.environ["GROQ_API_KEY"]= "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"
+client = Groq()
+
 model = joblib.load("DBS_SGD_model.pkl")
 app = Flask(__name__)
+
 
 @app.route("/",methods=["GET","POST"])
 def index():
@@ -21,6 +28,23 @@ def dbsPrediction():
     r = model.predict([[q]])
     r=r[0][0]
     return(render_template("dbsPrediction.html", r=r))
+
+
+@app.route("/chatbot", methods=["GET","POST"])
+def chatbot():
+    return(render_template("chatbot.html"))
+
+
+
+
+@app.route("/reply",methods=["GET","POST"])
+def reply():
+    q=request.form.get("q")
+    r = client.chat.completions.create(
+    model = "llama-3.1-8b-instant",
+    messages = [{"role": "user", "content": q}]
+)
+    return(render_template("reply.html", r=r.choices[0].message.content))
 
 if __name__ == "__main__":
     app.run()
