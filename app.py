@@ -3,7 +3,6 @@ import joblib
 from groq import Groq
 import os
 
-os.environ[GROQ_API_KEY] = "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"
 client = Groq()
 
 model = joblib.load("DBS_SGD_model.pkl")
